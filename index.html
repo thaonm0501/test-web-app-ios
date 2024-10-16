@@ -25,55 +25,7 @@
         <div id="unity-build-title">Test Web App</div>
       </div>
 	  -->      
-    </div>
-    <script type="module">
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-      import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js";
-      // TODO: Add SDKs for Firebase products that you want to use
-      // https://firebase.google.com/docs/web/setup#available-libraries
-
-      // Your web app's Firebase configuration
-      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-      const firebaseConfig = {
-        apiKey: "AIzaSyCb1p46FlHleFbxRSDcJJCoIvTdjK99__E",
-        authDomain: "fall-io.firebaseapp.com",
-        databaseURL: "https://fall-io.firebaseio.com",
-        projectId: "fall-io",
-        storageBucket: "fall-io.appspot.com",
-        messagingSenderId: "735906536510",
-        appId: "1:735906536510:web:ef6ff7bb1472b8eeee456f",
-        measurementId: "G-FB65CG4BWC"
-      };
-
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-
-      var logEventFirebase = function(eventName, eventParams) {
-          console.log("tracking event " + eventName)
-          console.log(eventParams)
-          let paramsObject = {}
-          if (eventParams != null){
-            let params = eventParams.split(",")
-            if(params.length > 0){
-              for (var i = 0; i < params.length / 2; i++) {
-                let key = params[i * 2]
-                let value = params[i * 2 + 1]
-                if(value == null) {
-                  continue
-                }
-                paramsObject[key] = value
-              }
-            }
-          }
-
-          logEvent(analytics, eventName, paramsObject)
-
-        }
-
-      window.logEventFirebase = logEventFirebase
-    </script>
+    </div>   
     <script>
       const webapp = window.Telegram.WebApp;
       var container = document.querySelector("#unity-container");
