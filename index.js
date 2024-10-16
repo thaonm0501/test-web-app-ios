@@ -23,7 +23,7 @@ bot.onText(/start|game/, (msg) => {
 		reply_markup: {
             inline_keyboard: [
                 [{
-                    text: 'Play Game Here',
+                    text: 'Play Game Hereeee',
                      web_app: {
 				     url: "https://thaonm0501.github.io/test-web-app-ios/"
 					}
