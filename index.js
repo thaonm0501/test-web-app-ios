@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const TelegramBot = require("node-telegram-bot-api");
-const TOKEN = "7779923172:AAEl0b3cDRmmt6WA0LBXJisri5Wo25ZIOXc";
+const TOKEN = "7953603646:AAFqYbsM124zh50Y6e4i4ILHbe-GiRfXsls";
 const server = express();
 const bot = new TelegramBot(TOKEN, {
     polling: true
@@ -9,11 +9,11 @@ const bot = new TelegramBot(TOKEN, {
 const port = process.env.PORT || 5000;
 const gameName = "testwebapp";
 const queries = {};
-const { Keyboard } = require('telegram-keyboard')
+//const { Keyboard } = require('telegram-keyboard')
 server.use(express.static(path.join(__dirname, 'testwebapp')));
 bot.onText(/help/, (msg) => bot.sendMessage(msg.from.id, "Say /game if you want to play."));
 bot.onText(/start|game/, (msg) => {
-	//bot.sendGame(msg.from.id, gameName)
+	bot.sendGame(msg.from.id, gameName)
 	
 	const imageUrl = "https://vnokia.net/images/wallpaper/2024/360x640/33/wallpaper_360x640_33_27.jpg"; // URL to the image
 	bot.sendPhoto(msg.from.id, imageUrl, {
@@ -25,7 +25,7 @@ bot.onText(/start|game/, (msg) => {
                 [{
                     text: 'Play Game Here',
                      web_app: {
-				     url: "https://thaonm0501.github.io/testwebapp/"
+				     url: "https://thaonm0501.github.io/test-web-app-ios/"
 					}
                 }]
             ]
@@ -42,11 +42,11 @@ bot.on("callback_query", function (query) {
         bot.answerCallbackQuery(query.id, "Sorry, '" + query.game_short_name + "' is not available.");
     } else {
         queries[query.id] = query;
-        //let gameurl = "https://thaonm0501.github.io/testwebapp/";
-        //bot.answerCallbackQuery({
-            //callback_query_id: query.id,
-            //url: gameurl
-        //});
+        let gameurl = "https://thaonm0501.github.io/test-web-app-ios/";
+        bot.answerCallbackQuery({
+            callback_query_id: query.id,
+            url: gameurl
+        });
 
     }
 });
