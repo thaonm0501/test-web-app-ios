@@ -3,38 +3,86 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | WebGL Loader Tutorial Build</title>
+    <title>Fall.io - Race of Dino</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
 	<script src="https://telegram.org/js/telegram-web-app.js"></script>
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+     <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
           <div id="unity-progress-bar-full"></div>
         </div>
       </div>
-	  <!--
+      <!--
       <div id="unity-warning"> </div>
       <div id="unity-footer">
         <div id="unity-webgl-logo"></div>
         <div id="unity-fullscreen-button"></div>
         <div id="unity-build-title">Test Web App</div>
       </div>
-	  -->
+	  -->      
     </div>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+      import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyCb1p46FlHleFbxRSDcJJCoIvTdjK99__E",
+        authDomain: "fall-io.firebaseapp.com",
+        databaseURL: "https://fall-io.firebaseio.com",
+        projectId: "fall-io",
+        storageBucket: "fall-io.appspot.com",
+        messagingSenderId: "735906536510",
+        appId: "1:735906536510:web:ef6ff7bb1472b8eeee456f",
+        measurementId: "G-FB65CG4BWC"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+
+      var logEventFirebase = function(eventName, eventParams) {
+          console.log("tracking event " + eventName)
+          console.log(eventParams)
+          let paramsObject = {}
+          if (eventParams != null){
+            let params = eventParams.split(",")
+            if(params.length > 0){
+              for (var i = 0; i < params.length / 2; i++) {
+                let key = params[i * 2]
+                let value = params[i * 2 + 1]
+                if(value == null) {
+                  continue
+                }
+                paramsObject[key] = value
+              }
+            }
+          }
+
+          logEvent(analytics, eventName, paramsObject)
+
+        }
+
+      window.logEventFirebase = logEventFirebase
+    </script>
     <script>
-	  const webapp = window.Telegram.WebApp;
+      const webapp = window.Telegram.WebApp;
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingBar = document.querySelector("#unity-loading-bar");
       var progressBarFull = document.querySelector("#unity-progress-bar-full");
       var fullscreenButton = document.querySelector("#unity-fullscreen-button");
       var warningBanner = document.querySelector("#unity-warning");
-	  //webapp.expand();
+
       // Shows a temporary message banner/ribbon for a few seconds, or
       // a permanent error message on top of the canvas if type=='error'.
       // If type=='warning', a yellow highlight color is used.
@@ -60,15 +108,16 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/Test Web Gl.loader.js";
+      var loaderUrl = buildUrl + "/Fall_Tele.loader.js";
       var config = {
-        dataUrl: buildUrl + "/Test Web Gl.data",
-        frameworkUrl: buildUrl + "/Test Web Gl.framework.js",
-        codeUrl: buildUrl + "/Test Web Gl.wasm",
+        dataUrl: buildUrl + "/099ac00ce0b78b2c1cb9c3b980294801.data",
+        frameworkUrl: buildUrl + "/b033f831c4204573d072a0f1bf172f7c.js",
+        codeUrl: buildUrl + "/f7d8e4dfd34dfb7d625db6eb6ad2591c.wasm",
         streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "Test Web App",
-        productVersion: "1.0",
+        companyName: "Genify",
+        productName: "Fall.io",
+        productVersion: "1.5.0.9",
+        showBanner: unityShowBanner,
       };
 
       // By default Unity keeps WebGL canvas render target size matched with
@@ -87,30 +136,33 @@
         canvas.className = "unity-mobile";
 		config.devicePixelRatio = 1;
       } else {
-		canvas.style.width = ((getHeight())*9/16)+"px";
-        canvas.style.height = (getHeight())+"px";
+
+		 //canvas.style.width = ((getHeight()-getHeight()*.05)*9/16)+"px";
+        	//canvas.style.height = (getHeight()-getHeight()*.05)+"px";
+	      	canvas.style.width = getWidth()+"px";
+        	canvas.style.height = getHeight()+"px";
 		console.log('Width:  ' +  getWidth());
-		console.log('Height: ' +  getHeight());
+		console.log('Height: ' +getHeight());
       }
       loadingBar.style.display = "block";
 
-       var script = document.createElement("script");
+      var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
           progressBarFull.style.width = 100 * progress + "%";
-              }).then((unityInstance) => {
-                loadingBar.style.display = "none";
-                //fullscreenButton.onclick = () => {
-                  //unityInstance.SetFullscreen(1);
-                //};
-              }).catch((message) => {
-                alert(message);
-              });
-            };
-
+        }).then((unityInstance) => {
+          window.unityInstance = unityInstance;
+          loadingBar.style.display = "none";
+          //fullscreenButton.onclick = () => {
+            //unityInstance.SetFullscreen(1);
+          //};
+        }).catch((message) => {
+          alert(message);
+        });
+      };
       document.body.appendChild(script);
-	  setTimeout(() => {  webapp.expand(); }, 500);
+	   setTimeout(() => {  webapp.expand(); }, 500);
 	  function getWidth() {
   return Math.max(
     document.body.scrollWidth,
